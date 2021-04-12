@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { message } from "antd";
+
 import axios from "axios";
 import CONFIG from "../config/index";
 import { v4 as uuidv4 } from "uuid";
+import { autenticar, listado, crear, actualizar } from "../helpers/Query";
 export const DataContext = React.createContext();
 
 const DataProvider = (props) => {
@@ -10,6 +11,14 @@ const DataProvider = (props) => {
   const [visibleLoading, setVisibleLoading] = useState(false);
   const [dataTableDelivery, setDataTableDelivery] = useState(null);
   const [dataFormDelivery, setDataFormDelivery] = useState(null);
+  const [dataDeliveryBySucursal, setDataDeliveryBySucursal] = useState(null);
+  const [dataTableSucursal, setDataTableSucursal] = useState(null);
+  const [dataFormSucursal, setDataFormSucursal] = useState(null);
+  const [dataTableDomicilio, setDataTableDomicilio] = useState(null);
+  const [dataFormDomicilio, setDataFormDomicilio] = useState(null);
+  const [dataListArticulo, setDataListArticulo] = useState(null);
+  const [dataTableCliente, setDataTableCliente] = useState(null);
+  const [dataFormCliente, setDataFormCliente] = useState(null);
   const [activeTap, setActiveTap] = useState("1");
 
   useEffect(() => {
@@ -30,42 +39,16 @@ const DataProvider = (props) => {
 
   /////////////////////////////////////
   const login = async (datos, props) => {
-    setVisibleLoading(true);
-    if (datos !== undefined && datos !== null) {
-      try {
-        let url = CONFIG.URL + "auth/signin";
-        const json = await axios.post(url, datos);
-        const data = json.data;
-        console.log(data.user.username);
-        if (json.status === 200) {
-          props.history.push("/home");
-          setLogeado(true);
-          localStorage.setItem("usuarioSesion", JSON.stringify(true));
-          localStorage.setItem("token", data.token);
-          const userName = data.user.username;
-          localStorage.setItem("usuarioNombre", JSON.stringify(userName));
-
-          setTimeout(function () {
-            setVisibleLoading(false);
-          }, 2000);
-        } else if (json.status === 201) {
-          setTimeout(function () {
-            setVisibleLoading(false);
-          }, 2000);
-        } else if (json.status === 401) {
-          localStorage.clear();
-          setLogeado(false);
-        }
-      } catch (e) {
-        setTimeout(function () {
-          setVisibleLoading(false);
-        }, 2000);
-        console.log(e);
-        // if (e.response.status === 401 || e.response.status === 500) {
-        //    destruirSesion()
-        //  }
-      }
+    loading();
+    const uri = "auth/signin";
+    const res = await autenticar(datos, uri, props);
+    if (res) {
+      setLogeado(true);
+      setActiveTap("1");
+    }else{
+      setLogeado(false);
     }
+    loading();
   };
 
   ////////////////////////////////////
@@ -74,90 +57,79 @@ const DataProvider = (props) => {
     setLogeado(false);
   };
 
-  const crearDomiciliario = async (datos) => {
-    if (datos !== undefined && datos !== null) {
-      setVisibleLoading(true);
-      let token = localStorage.getItem("token", JSON.stringify(true));
-      try {
-        let url = CONFIG.URL + "delivery";
-        const json = await axios({
-          method: "post", //you can set what request you want to be
-          url: url,
-          data: datos,
-          headers: {
-            Authorization: token,
-          },
-        });
-        const data = json;
-        if (json.status === 200) {
-          setTimeout(function () {
-            setVisibleLoading(false);
-          }, 2000);
-          message.success("Domiciliario Creado");
-          setActiveTap("1");
-          cargarListaDomiciliarios();
-        }else{
-          if (data.status === 202){
-          setTimeout(function () {
-            setVisibleLoading(false);
-          }, 2000);
-          message.error(data.data.message);
-          return
-        }}
-      } catch (error) {
-        console.error(error);
-      }
+  const loading = () => {
+    setTimeout(function () {
+      setVisibleLoading(!setVisibleLoading);
+    }, 1000);
+  };
+
+  /// Inicio seccion Cliente ********************************************************
+  const crearCliente = async (datos) => {
+    loading();
+    const uri = "cliente";
+    const res = await crear(datos, uri);
+    if (res) {
+      setActiveTap("1");
+      cargarListaCliente();
     }
+    loading();
+  };
+  const actualizarCliente = async (datos) => {
+    loading();
+    const uri = "cliente";
+    const res = await actualizar(datos, uri);
+    if (res) {
+      setActiveTap("1");
+      cargarListaCliente();
+    }
+    loading();
+  };
+
+  const cargarListaCliente = async () => {
+    loading();
+    const uri = "cliente";
+    const res = await listado(uri);
+    setDataTableCliente(res);
+    loading();
+  };
+
+  /// Fin seccion Cliente ****************************************************************
+  /// Inicio seccion domiciliario ********************************************************
+  const crearDomiciliario = async (datos) => {
+    loading();
+    const uri = "delivery";
+    const res = await crear(datos, uri);
+    if (res) {
+      setActiveTap("1");
+      cargarListaDomiciliarios();
+    }
+    loading();
   };
 
   const actualizarDomiciliario = async (datos) => {
-    if (datos !== undefined && datos !== null) {
-      if (
-        datos.password === null ||
-        datos.password === "" ||
-        datos.password === undefined
-      ) {
-        delete datos.password;
-      }
-      setVisibleLoading(true);
-      let token = localStorage.getItem("token", JSON.stringify(true));
-      let url = CONFIG.URL + `delivery/${datos._id}`;
-      try {
-        const json = await axios({
-          method: "put", //you can set what request you want to be
-          url: url,
-          data: datos,
-          headers: {
-            Authorization: token,
-          },
-        });
-        const data = json;
-        if (data.status === 200) {
-          setTimeout(function () {
-            setVisibleLoading(false);
-          }, 2000);
-          message.success("Domiciliario Actualizado");
-          setActiveTap("1");
-          cargarListaDomiciliarios();
-        } else {
-            setTimeout(function () {
-              setVisibleLoading(false);
-            }, 2000);
-            message.error(data.data.message);
-            return
-          //message.error(data.status.json.message);
-        }
-      } catch (error) {
-        console.log(error.response);
-      }
+    loading();
+    const uri = "delivery";
+    const res = await actualizar(datos, uri);
+    if (res) {
+      setActiveTap("1");
+      cargarListaDomiciliarios();
     }
+    loading();
   };
 
   const cargarListaDomiciliarios = async () => {
+    loading();
+    const uri = "delivery";
+    const res = await listado(uri);
+    setDataTableDelivery(res);
+    loading();
+  };
+
+  const domiciliarioBySucursal = async (sucursalId) => {
     setVisibleLoading(true);
     let token = localStorage.getItem("token", JSON.stringify(true));
     try {
-      let url = CONFIG.URL + "delivery";
+      let url = CONFIG.URL + `delivery/list/${sucursalId}`;
       const json = await axios.get(url, {
         headers: {
           Authorization: token,
@@ -168,7 +140,7 @@ const DataProvider = (props) => {
         for (var i = 0; i < data.data.length; i++) {
           data.data[i].key = uuidv4();
         }
-        setDataTableDelivery(data.data);
+        setDataDeliveryBySucursal(data.data);
         setTimeout(function () {
           setVisibleLoading(false);
         }, 1000);
@@ -177,6 +149,90 @@ const DataProvider = (props) => {
       console.error(error);
     }
   };
+  /// Fin seccion domiciliario ********************************************************
+  /// Inicio seccion sucursales *******************************************************
+  const crearSucursal = async (datos) => {
+    loading();
+    const uri = "sucursal";
+    const res = await crear(datos, uri);
+    if (res) {
+      setActiveTap("1");
+      cargarListaSucursales();
+    }
+    loading();
+  };
+
+  const actualizarSucursal = async (datos) => {
+    loading();
+    const uri = "sucursal";
+    const res = await actualizar(datos, uri);
+    if (res) {
+      setActiveTap("1");
+      cargarListaSucursales();
+    }
+    loading();
+  };
+
+  const cargarListaSucursales = async () => {
+    loading();
+    const uri = "sucursal";
+    const res = await listado(uri);
+    setDataTableSucursal(res);
+    loading();
+  };
+
+  /// Fin seccion sucursales ***********************************************************
+  /// Inicio seccion domicilios ********************************************************
+  const crearDomicilio = async (datos) => {
+    loading();
+    const uri = "domicilio";
+    const res = await crear(datos, uri);
+    if (res) {
+      setActiveTap("1");
+      cargarListaDomicilio();
+    }
+    loading();
+  };
+
+  const actualizarDomicilio = async (datos) => {
+    loading();
+    const uri = "domicilio";
+    const res = await actualizar(datos, uri);
+    if (res) {
+      setActiveTap("1");
+      cargarListaDomicilio();
+    }
+    loading();
+  };
+
+  const cargarListaDomicilio = async () => {
+    loading();
+    const uri = "domicilio";
+    const res = await listado(uri);
+    setDataTableDomicilio(res);
+    loading();
+  };
+  /// Fin seccion sucursales ********************************************************
+  ////Inicio seccion productos ******************************************************
+  const filtrarProducto = async (articulo) => {
+    setVisibleLoading(true);
+    // let token = localStorage.getItem("token", JSON.stringify(true));
+    const dir = "http://192.168.1.156:8080/articulos";
+    try {
+      let url = dir + `${articulo}`;
+      const json = await axios.get(url);
+      const data = json;
+      if (data.status === 200) {
+        setDataListArticulo(data.data);
+        setTimeout(function () {
+          setVisibleLoading(false);
+        }, 1000);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  /// Fin seccion productos *********************************************************
 
   /////////////////////
   /////
@@ -194,8 +250,34 @@ const DataProvider = (props) => {
         dataTableDelivery,
         dataFormDelivery,
         setDataFormDelivery,
+        domiciliarioBySucursal,
+        dataDeliveryBySucursal,
+        setDataDeliveryBySucursal,
         activeTap,
         setActiveTap,
+        cargarListaSucursales,
+        crearSucursal,
+        dataTableSucursal,
+        dataFormSucursal,
+        setDataFormSucursal,
+        actualizarSucursal,
+        crearDomicilio,
+        actualizarDomicilio,
+        cargarListaDomicilio,
+        dataTableDomicilio,
+        setDataTableDomicilio,
+        dataFormDomicilio,
+        setDataFormDomicilio,
+        filtrarProducto,
+        dataListArticulo,
+        setDataListArticulo,
+        crearCliente,
+        actualizarCliente,
+        cargarListaCliente, 
+        dataTableCliente, 
+        setDataTableCliente, 
+        dataFormCliente, 
+        setDataFormCliente
       }}
     >
       {props.children}

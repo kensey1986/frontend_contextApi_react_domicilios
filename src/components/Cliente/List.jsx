@@ -108,7 +108,7 @@ class List extends Component {
 
   render() {
     const { dataTable, setDataForm, setActiveTap } = this.props;
-
+    console.log(dataTable)
    
     const rowSelected = (record) => {
       setDataForm(record);
@@ -116,18 +116,6 @@ class List extends Component {
     };
 
     const headerTable = [
-      {
-        title: "Nick",
-        dataIndex: "username",
-        render: (text, record) => (
-          <Space size="middle">
-            <a href="##">{record.username}</a>
-          </Space>
-        ),
-        key: "username",
-        width: "30%",
-        ...this.getColumnSearchProps("username"),
-      },
       {
         title: "Nombre",
         dataIndex: "name",
@@ -137,24 +125,22 @@ class List extends Component {
           </Space>
         ),
         key: "name",
-        width: "20%",
+        width: "30%",
         ...this.getColumnSearchProps("name"),
       },
       {
-        title: "Sucursal",
-        dataIndex: "sucursal",
-        render: (text, record) => {
-          return (
-            <Space size="middle">
-              <a href="##">{record.sucursal.name}</a>
-            </Space>
-          );
-        },
-        //key: "sucursal.name",
+        title: "Apellido",
+        dataIndex: "apellido",
+        render: (text, record) => (
+          <Space size="middle">
+            <a href="##">{record.apellido}</a>
+          </Space>
+        ),
+        key: "apellido",
         width: "20%",
-        align: "center",
-        // ...this.getColumnSearchProps('sucursal',),
+        ...this.getColumnSearchProps("apellido"),
       },
+     
     ];
     return (
       <Table

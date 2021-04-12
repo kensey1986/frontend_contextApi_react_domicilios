@@ -1,32 +1,23 @@
-import React, { Component } from 'react';
-import {Route, Redirect} from 'react-router-dom';
-import { DataContext } from "../context/Context";
 
-export default class FreeRoute extends Component {
-   
-    state = {  }
-    render() { 
-        const { logeado } = this.context;
-        const { component: Component, ...rest } = this.props;
-        return ( 
-            <Route {...rest} 
-            render={ props =>{
-                if (!logeado){
-                    return <Component {...props}/>
-                }else {
-                    return <Redirect to= {
-                        {
-                            pathname: "/delivery",
-                            state: {
-                                from: props.location
-                            }
-                        }
-                    } />
-                }
-                    
-                }}
-                />
-         );
-    }
+import React, { useContext } from "react";
+import { DataContext } from "../context/Context";
+import { Redirect, Route } from 'react-router-dom'
+
+export const FreeRoute = ({
+   component: Component,
+   ...rest
+}) => {
+    const {logeado} = useContext(DataContext);
+    return (
+        <Route { ...rest }
+            component={ (props) => (
+                ( !logeado )
+                    ? <Component { ...props } />
+                    : <Redirect to="/delivery" />
+            )} 
+        />
+    )
 }
-FreeRoute.contextType = DataContext;
+
+export default  FreeRoute;
+

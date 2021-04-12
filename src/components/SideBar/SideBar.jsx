@@ -25,21 +25,24 @@ const SideBar = () => {
       {/* <div><img src ="img/logo.png" width={180}/></div> */}
       <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
       <Menu.Item key="1" icon={<PicLeftOutlined id="icono" />}>
-          <Link to="/home">Bitacora</Link>
+          <Link to="/">Bitacora</Link>
         </Menu.Item>
         <Menu.Item key="2" icon={<ColumnWidthOutlined id="icono" />}>
           <Link to="/delivery">Domiciliario</Link>
         </Menu.Item>
         <Menu.Item key="3" icon={<UploadOutlined id="icono" />}>
-          <Link to="/manager">Gestor Artículos</Link>
+          <Link to="/sucursal">Sucursales</Link>
         </Menu.Item>
         <Menu.Item key="4" icon={<DollarCircleOutlined id="icono" />}>
-          <Link to="/discount">Descuentos</Link>
+          <Link to="/domicilio">Domicilio</Link>
         </Menu.Item>
         <Menu.Item key="5" icon={<InfoCircleOutlined id="icono" />}>
+          <Link to="/cliente">Clientes</Link>
+        </Menu.Item>
+        <Menu.Item key="6" icon={<InfoCircleOutlined id="icono" />}>
           <Link to="/information">Gestión Ordenes</Link>
         </Menu.Item>
-        <Menu.Item key="6" icon={<SettingFilled id="icono" />}>
+        <Menu.Item key="7" icon={<SettingFilled id="icono" />}>
           <Link to="/configuration">Informes</Link>
         </Menu.Item>
       </Menu>

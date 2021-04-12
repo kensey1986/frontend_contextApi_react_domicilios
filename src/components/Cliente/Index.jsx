@@ -12,21 +12,19 @@ import {
 
 const Index = () => {
   const {
-    cargarListaDomiciliarios,
-    dataTableDelivery,
-    dataFormDelivery,
-    setDataFormDelivery,
+    cargarListaCliente,
+    dataTableCliente,
+    dataFormCliente,
+    setDataFormCliente,
     activeTap,
     setActiveTap,
-    dataTableSucursal,
-    cargarListaSucursales,
   } = useContext(DataContext);
 
   const { TabPane } = Tabs;
 
   useEffect(() => {
     try {
-      cargarListaDomiciliarios();
+      cargarListaCliente();
     } catch (error) {
       console.error(error);
     }
@@ -34,18 +32,9 @@ const Index = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    try {
-      cargarListaSucursales();
-    } catch (error) {
-      console.error(error);
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const onChange = (activeKey) => {
-    setDataFormDelivery(undefined);
+    setDataFormCliente(undefined);
     setActiveTap(activeKey);
   };
   return (
@@ -61,8 +50,8 @@ const Index = () => {
           key="1"
         >
           <List
-            dataTable={dataTableDelivery}
-            setDataForm={setDataFormDelivery}
+            dataTable={dataTableCliente}
+            setDataForm={setDataFormCliente}
             setActiveTap={setActiveTap}
           />
         </TabPane>
@@ -75,7 +64,7 @@ const Index = () => {
           }
           key="2"
         >
-          <Create  listSucursales={dataTableSucursal} />
+          <Create   />
         </TabPane>
         <TabPane
           disabled
@@ -90,8 +79,7 @@ const Index = () => {
           <Edit
             activeTap={activeTap}
             setActiveTap={setActiveTap}
-            dataForm={dataFormDelivery}
-            listSucursales={dataTableSucursal}
+            dataForm={dataFormCliente}
           />
         </TabPane>
       </Tabs>

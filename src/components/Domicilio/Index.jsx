@@ -1,32 +1,26 @@
 import React, { useContext, useEffect } from "react";
 import { DataContext } from "../../context/Context";
-import Create from "./Create";
-import Edit from "./Edit";
+import Create from "./CreateEdit";
 import List from "./List";
 import { Tabs } from "antd";
-import {
-  EditOutlined,
-  FormOutlined,
-  UnorderedListOutlined,
-} from "@ant-design/icons";
+import { EditOutlined, FormOutlined, UnorderedListOutlined } from "@ant-design/icons";
 
 const Index = () => {
   const {
-    cargarListaDomiciliarios,
-    dataTableDelivery,
-    dataFormDelivery,
-    setDataFormDelivery,
-    activeTap,
-    setActiveTap,
+    cargarListaDomicilio,
+    dataTableDomicilio,
+    dataFormDomicilio,
+    setDataFormDomicilio,
     dataTableSucursal,
     cargarListaSucursales,
+    actualizarDomicilio, activeTap, setActiveTap, domiciliarioBySucursal
   } = useContext(DataContext);
 
   const { TabPane } = Tabs;
 
   useEffect(() => {
     try {
-      cargarListaDomiciliarios();
+      cargarListaDomicilio();
     } catch (error) {
       console.error(error);
     }
@@ -44,13 +38,15 @@ const Index = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const onChange = (activeKey) => {
-    setDataFormDelivery(undefined);
-    setActiveTap(activeKey);
+  const onChange = activeKey => {
+    setDataFormDomicilio(undefined)
+    setActiveTap(activeKey)
   };
   return (
     <>
-      <Tabs onChange={onChange} activeKey={activeTap}>
+      <Tabs 
+      onChange={onChange}
+      activeKey={activeTap}>
         <TabPane
           tab={
             <span>
@@ -61,8 +57,8 @@ const Index = () => {
           key="1"
         >
           <List
-            dataTable={dataTableDelivery}
-            setDataForm={setDataFormDelivery}
+            dataTable={dataTableDomicilio}
+            setDataForm={setDataFormDomicilio}
             setActiveTap={setActiveTap}
           />
         </TabPane>
@@ -75,10 +71,13 @@ const Index = () => {
           }
           key="2"
         >
-          <Create  listSucursales={dataTableSucursal} />
+          <Create  listSucursales={dataTableSucursal}
+          domiciliarioBySucursal={domiciliarioBySucursal}
+          activeTap={activeTap}
+          />
         </TabPane>
         <TabPane
-          disabled
+          disabled 
           tab={
             <span>
               <EditOutlined />
@@ -87,11 +86,11 @@ const Index = () => {
           }
           key="3"
         >
-          <Edit
-            activeTap={activeTap}
-            setActiveTap={setActiveTap}
-            dataForm={dataFormDelivery}
-            listSucursales={dataTableSucursal}
+          <Create 
+          activeTap={activeTap}
+          setActiveTap={setActiveTap}
+          dataForm={dataFormDomicilio} 
+          actualizarData={actualizarDomicilio}
           />
         </TabPane>
       </Tabs>

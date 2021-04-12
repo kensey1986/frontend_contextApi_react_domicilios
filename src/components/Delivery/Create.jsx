@@ -1,23 +1,18 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { DataContext } from "../../context/Context";
-import { Row, Col, Card, Form, Input, Button } from "antd";
+import { Row, Col, Card, Form, Input, Button, Select } from "antd";
 
-const CreateEdit = (props) => {
+const Create = (props) => {
   const { crearDomiciliario } = useContext(DataContext);
-  let { dataForm, activeTap, actualizarDomiciliario } = props;
-  let titulo = "Actualizar";
+  const [selectData, setSelectData] = useState(null);
+  let {  listSucursales } = props;
+  const { Option } = Select;
 
-  if (dataForm === null || dataForm === undefined) {
-    dataForm = {
-      username: "",
-      name: "",
-      password: "",
-    };
-  }
-  if (activeTap === "2") {
-    titulo = "Crear";
-  } else {
-    titulo = "Actualizar";
+
+  function handleChange(value) {
+    if (value) {
+      setSelectData(value);
+    }
   }
 
   const layout = {
@@ -29,15 +24,13 @@ const CreateEdit = (props) => {
   };
 
   const onFinish = async (values) => {
-    if (activeTap === "2") {
-       crearDomiciliario(values);
-      
-    } else {
-      dataForm.username= values.username
-      dataForm.name= values.name
-      dataForm.password= values.password
-       actualizarDomiciliario(dataForm);
-    }
+    values = {
+      name: values.username,
+      username: values.username,
+      password: values.password,
+      sucursal: selectData,
+    };
+     crearDomiciliario(values);
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -49,18 +42,13 @@ const CreateEdit = (props) => {
         <Col span={7}></Col>
         <Col span={10}>
           <div style={{ padding: 30, background: "#ececec" }}>
-            <Card title={titulo} bordered={false} style={{ width: 400 }}>
+            <Card title='Crear Sucursal' bordered={false} style={{ width: 400 }}>
               <Form
                 {...layout}
                 initialValues={{ remember: false }}
                 name="basic"
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
-                fields={[
-                  { name: "username", value: dataForm.username },
-                  { name: "name", value: dataForm.name },
-                  { name: "password", value: null },
-                ]}
               >
                 <Form.Item
                   label="Nick"
@@ -72,7 +60,7 @@ const CreateEdit = (props) => {
                   <Input 
                     autoComplete="none" 
                     placeholder="Digite un 'Nick' " 
-                    disabled={activeTap === "3" || false}/>
+                    />
                 </Form.Item>
                 <Form.Item
                   label="Nombre"
@@ -86,8 +74,7 @@ const CreateEdit = (props) => {
                     placeholder="Digite su 'Nombre' "
                   />
                 </Form.Item>
-                {activeTap === "2" ? (
-                  <Form.Item
+                <Form.Item
                     label="Conraseña"
                     name="password"
                     rules={[
@@ -102,33 +89,22 @@ const CreateEdit = (props) => {
                       placeholder="Digite su 'Contraseña' "
                     />
                   </Form.Item>
-                ) : (
-                  <Form.Item
-                    label="Conraseña"
-                    name="password"
-                    rules={[
-                      {
-                        required: false,
-                      },
-                    ]}
+                 <Form.Item label="Select">
+                  <Select
+                    defaultValue="Seleccione..."
+                    onChange={handleChange}
+                    allowClear={false}
+                    name='sucursal'
                   >
-                    <Input.Password
-                      autoComplete="new-password"
-                      placeholder="Digite 'Nueva Contraseña' "
-                    />
-                  </Form.Item>
-                )}
-
+                    {listSucursales.map((datos) => {
+                      return <Option key={datos._id}>{datos.name}</Option>;
+                    })}
+                  </Select>
+                </Form.Item>
                 <Form.Item {...tailLayout}>
-                  {activeTap === "2" ? (
                     <Button type="primary" htmlType="submit">
                       Crear
                     </Button>
-                  ) : (
-                    <Button type="primary" htmlType="submit">
-                      Actualizar
-                    </Button>
-                  )}
                 </Form.Item>
               </Form>
             </Card>
@@ -140,4 +116,4 @@ const CreateEdit = (props) => {
   );
 };
 
-export default CreateEdit;
+export default Create;

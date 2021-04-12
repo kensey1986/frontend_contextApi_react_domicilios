@@ -1,11 +1,10 @@
 import React from 'react'
-import { Layout, Menu, Row, Col, Typography,Button } from 'antd'
-import { UserOutlined,ReloadOutlined} from '@ant-design/icons'
+import { Layout, Menu, Row, Col } from 'antd'
+import { UserOutlined, } from '@ant-design/icons'
 
 const Header = props => {
   const { Header } = Layout
   const { SubMenu } = Menu
-  const { Text,Title } = Typography
 
   const userName = JSON.parse(localStorage.getItem('usuarioNombre'))
   const { logeado, destruirSesion } = props
