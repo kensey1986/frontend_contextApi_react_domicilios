@@ -108,7 +108,6 @@ class List extends Component {
 
   render() {
     const { dataTable, setDataForm, setActiveTap } = this.props;
-    console.log(dataTable)
    
     const rowSelected = (record) => {
       setDataForm(record);
@@ -139,6 +138,17 @@ class List extends Component {
         key: "apellido",
         width: "20%",
         ...this.getColumnSearchProps("apellido"),
+      },
+      {
+        title: "Barrio",
+        dataIndex: "barrio.name",
+        render: (text, record) => (
+          <Space size="middle">
+            <p>{record.barrio.name}</p>
+          </Space>
+        ),
+        key: "apellido",
+        width: "20%",
       },
      
     ];

@@ -13,7 +13,7 @@ export const FreeRoute = ({
             component={ (props) => (
                 ( !logeado )
                     ? <Component { ...props } />
-                    : <Redirect to="/delivery" />
+                    : <Redirect to="/domicilio" />
             )} 
         />
     )

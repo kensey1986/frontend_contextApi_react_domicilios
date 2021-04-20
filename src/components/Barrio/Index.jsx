@@ -4,43 +4,37 @@ import Create from "./Create";
 import Edit from "./Edit";
 import List from "./List";
 import { Tabs } from "antd";
-import {
-  EditOutlined,
-  FormOutlined,
-  UnorderedListOutlined,
-} from "@ant-design/icons";
+import { EditOutlined, FormOutlined, UnorderedListOutlined } from "@ant-design/icons";
 
 const Index = () => {
   const {
-    cargarListaCliente,
-    dataTableCliente,
-    dataFormCliente,
-    setDataFormCliente,
-    dataTableBarrio,
     cargarListaBarrios,
-    activeTap,
-    setActiveTap,
+    dataTableBarrio,
+    setDataFormBarrio,
+    dataFormBarrio,
+    activeTap, setActiveTap,
   } = useContext(DataContext);
 
   const { TabPane } = Tabs;
 
   useEffect(() => {
     try {
-      cargarListaCliente();
+      cargarListaBarrios();
     } catch (error) {
       console.error(error);
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const onChange = (activeKey) => {
-    setDataFormCliente(undefined);
-    setActiveTap(activeKey);
+  const onChange = activeKey => {
+    setDataFormBarrio(undefined)
+    setActiveTap(activeKey)
   };
   return (
     <>
-      <Tabs onChange={onChange} activeKey={activeTap}>
+      <Tabs 
+      onChange={onChange}
+      activeKey={activeTap}>
         <TabPane
           tab={
             <span>
@@ -51,8 +45,8 @@ const Index = () => {
           key="1"
         >
           <List
-            dataTable={dataTableCliente}
-            setDataForm={setDataFormCliente}
+            dataTable={dataTableBarrio}
+            setDataForm={setDataFormBarrio}
             setActiveTap={setActiveTap}
           />
         </TabPane>
@@ -65,10 +59,10 @@ const Index = () => {
           }
           key="2"
         >
-          <Create  listaBarrios={dataTableBarrio} cargarListaBarrios={cargarListaBarrios}/>
+          <Create />
         </TabPane>
         <TabPane
-          disabled
+          disabled 
           tab={
             <span>
               <EditOutlined />
@@ -77,10 +71,8 @@ const Index = () => {
           }
           key="3"
         >
-          <Edit
-            dataForm={dataFormCliente}
-            listaBarrios={dataTableBarrio}
-            cargarListaBarrios={cargarListaBarrios}
+          <Edit 
+          dataForm={dataFormBarrio}
           />
         </TabPane>
       </Tabs>

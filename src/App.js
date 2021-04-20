@@ -15,6 +15,7 @@ import Delivery from "./components/Delivery/Index";
 import Sucursal from "./components/Sucursal/Index";
 import Domicilio from "./components/Domicilio/Index";
 import Cliente from "./components/Cliente/Index";
+import Barrio from "./components/Barrio/Index";
 
 
 
@@ -49,6 +50,7 @@ const App = () => {
                     <ProtecRoutes path="/delivery" component={Delivery} />
                     <ProtecRoutes path="/sucursal" component={Sucursal} />
                     <ProtecRoutes path="/domicilio" component={Domicilio} />
+                    <ProtecRoutes path="/barrio" component={Barrio} />
 					<ProtecRoutes path="/cliente" component={Cliente} />
                     <Route component={Default} />
                   </Switch>

@@ -40,9 +40,12 @@ const SideBar = () => {
           <Link to="/cliente">Clientes</Link>
         </Menu.Item>
         <Menu.Item key="6" icon={<InfoCircleOutlined id="icono" />}>
+          <Link to="/barrio">Barrio</Link>
+        </Menu.Item>
+        <Menu.Item key="7" icon={<InfoCircleOutlined id="icono" />}>
           <Link to="/information">Gestión Ordenes</Link>
         </Menu.Item>
-        <Menu.Item key="7" icon={<SettingFilled id="icono" />}>
+        <Menu.Item key="8" icon={<SettingFilled id="icono" />}>
           <Link to="/configuration">Informes</Link>
         </Menu.Item>
       </Menu>
