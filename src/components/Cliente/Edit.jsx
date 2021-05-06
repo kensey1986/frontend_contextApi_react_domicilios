@@ -1,7 +1,17 @@
 import React, { useContext, useEffect, useState } from "react";
 import { DataContext } from "../../context/Context";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
-import { Row, Col, Card, Form, Input, Button, Select, Space } from "antd";
+import {
+  Row,
+  Col,
+  Card,
+  Form,
+  Input,
+  Button,
+  Select,
+  Space,
+  InputNumber,
+} from "antd";
 import { v4 as uuidv4 } from "uuid";
 
 const Edit = (props) => {
@@ -41,11 +51,13 @@ const Edit = (props) => {
 
   const onFinish = async (values) => {
     values = {
-      name: values.name,
-      apellido: values.apellido,
-      barrio: selectData,
-      direccion: values.direccion,
-      barrios: values.barrios,
+      name: values.name.toUpperCase(),
+      barrio: selectData.toUpperCase(),
+      direccion: values.direccion.toUpperCase(),
+      barrios: values.barrios.toUpperCase(),
+      telefono: values.telefono,
+      celular: values.celular,
+      emeil: values.emeil.toUpperCase(),
     };
     actualizarCliente(dataForm);
   };
@@ -71,8 +83,10 @@ const Edit = (props) => {
               <Form
                 {...layout}
                 fields={[
-                  { name: "apellido", value: dataForm.apellido },
                   { name: "name", value: dataForm.name },
+                  { name: "telefono", value: dataForm.telefono },
+                  { name: "celular", value: dataForm.celular },
+                  { name: "emeil", value: dataForm.emeil },
                   { name: "direccion", value: dataForm.direccion },
                 ]}
                 name="basic"
@@ -89,23 +103,38 @@ const Edit = (props) => {
                 >
                   <Input
                     autoComplete="none"
-                    placeholder="Digite su 'Nombre' "
+                    placeholder="Digite su 'Nombre' completo"
+                    disabled={editar}
+                  />
+                </Form.Item>
+                <Form.Item label="Telefono" name="telefono">
+                  <InputNumber
+                    min={1}
+                    autoComplete="none"
+                    placeholder="Digite su 'telefono fijo' "
+                    disabled={editar}
+                  />
+                </Form.Item>
+                <Form.Item label="Celular" name="celular">
+                  <InputNumber
+                    min={1}
+                    autoComplete="none"
+                    placeholder="Digite su 'telefono celular' "
                     disabled={editar}
                   />
                 </Form.Item>
                 <Form.Item
-                  label="Apellido"
-                  name="apellido"
+                  name= "email"
+                  label="Email"
                   rules={[
-                    { required: true, message: "Por favor ingresar Apellido!" },
+                    {
+                      type: "email",
+                    },
                   ]}
                 >
-                  <Input
-                    autoComplete="none"
-                    placeholder="Digite 'Apellido' "
-                    disabled={editar}
-                  />
+                  <Input />
                 </Form.Item>
+
                 <Form.Item label="Barrio">
                   <Select
                     defaultValue={dataForm.barrio.name}
@@ -137,7 +166,7 @@ const Edit = (props) => {
                   {dataForm.barrios?.map((data) => {
                     return (
                       <div key={uuidv4()}>
-                        <Form.Item 
+                        <Form.Item
                           style={{ marginTop: "10px" }}
                           label="Barrio Aux"
                         >
@@ -146,9 +175,9 @@ const Edit = (props) => {
                             defaultValue={data.barrio}
                             disabled={editar}
                           />
-                          <MinusCircleOutlined  />
+                          <MinusCircleOutlined />
                         </Form.Item>
-                        <Form.Item label="Dir Aux" >
+                        <Form.Item label="Dir Aux">
                           <Input
                             autoComplete="none"
                             defaultValue={data.direccion}

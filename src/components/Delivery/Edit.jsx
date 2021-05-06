@@ -24,7 +24,7 @@ const CreateEdit = (props) => {
 
   const onFinish = async (values) => {
     dataForm.username = values.username;
-    dataForm.name = values.name;
+    dataForm.name = values.name.toUpperCase();
     dataForm.password = values.password;
     if (
       dataForm.password === null ||

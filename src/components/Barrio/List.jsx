@@ -109,23 +109,58 @@ class List extends Component  {
         dataIndex: "name",
         render: (text, record) => (
           <Space size="middle">
-            <a href="##">{record.name}</a>
+            <span >{record.name}</span>
           </Space>
         ),
         key: 'name',
         width: '20%',
         ...this.getColumnSearchProps('name',),
       },
+      {
+        title: "Comuna",
+        dataIndex: "comuna",
+        render: (text, record) => (
+          <Space size="middle">
+            <span >{record.comuna}</span>
+          </Space>
+        ),
+        key: 'comuna',
+        width: '20%',
+        ...this.getColumnSearchProps('comuna',),
+      },
+      {
+        title: "Estrato",
+        dataIndex: "estrato",
+        render: (text, record) => (
+          <Space size="middle">
+            <span >{record.estrato}</span>
+          </Space>
+        ),
+        key: 'estrato',
+        width: '20%',
+        ...this.getColumnSearchProps('estrato',),
+      },
     ];
-    return <Table columns={headerTable} 
-    dataSource={dataTable} 
-    onRow={(record) => {
-      return {
-        onDoubleClick: (event) => {
-          rowSelected(record);
-        },
-      };
-    }}/>;
+    return (
+      <>
+        {dataTable ? (
+          <Table
+            columns={headerTable}
+            dataSource={dataTable}
+            onRow={(record) => {
+              return {
+                onDoubleClick: (event) => {
+                  rowSelected(record);
+                },
+              };
+            }}
+          />
+        ) : null}
+      </>
+    );
+
+    
+    
   }
 }
 

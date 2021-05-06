@@ -5,7 +5,6 @@ import { Row, Col, Card, Form, Input, Button } from "antd";
 const Edit = (props) => {
   const { actualizarBarrio } = useContext(DataContext);
   let { dataForm } = props;
-
   const layout = {
     labelCol: { span: 8 },
     wrapperCol: { span: 16 },

@@ -20,6 +20,7 @@ const Index = () => {
   useEffect(() => {
     try {
       cargarListaBarrios();
+     
     } catch (error) {
       console.error(error);
     }
@@ -30,6 +31,8 @@ const Index = () => {
     setDataFormBarrio(undefined)
     setActiveTap(activeKey)
   };
+
+  console.log(dataTableBarrio)
   return (
     <>
       <Tabs 

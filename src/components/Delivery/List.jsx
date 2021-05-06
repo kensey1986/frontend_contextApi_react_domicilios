@@ -157,17 +157,21 @@ class List extends Component {
       },
     ];
     return (
-      <Table
-        columns={headerTable}
-        dataSource={dataTable}
-        onRow={(record) => {
-          return {
-            onDoubleClick: (event) => {
-              rowSelected(record);
-            },
-          };
-        }}
-      />
+      <>
+        {dataTable ? (
+          <Table
+            columns={headerTable}
+            dataSource={dataTable}
+            onRow={(record) => {
+              return {
+                onDoubleClick: (event) => {
+                  rowSelected(record);
+                },
+              };
+            }}
+          />
+        ) : null}
+      </>
     );
   }
 }

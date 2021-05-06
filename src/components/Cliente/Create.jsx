@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { DataContext } from "../../context/Context";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
-import { Row, Col, Card, Form, Input, Button, Select, Space } from "antd";
+import { Row, Col, Card, Form, Input, Button, Select, Space, InputNumber } from "antd";
 
 const Create = (props) => {
   const { crearCliente } = useContext(DataContext);
@@ -35,14 +35,14 @@ const Create = (props) => {
     }
   }
   const onFinish = async (values) => {
-    console.log(values)
-    console.log(selectData)
     values = {
-      name: values.name,
-      apellido: values.apellido,
-      barrio: selectData,
-      direccion: values.direccion,
-      barrios: values.barrios
+      name: values.name.toUpperCase(),
+      barrio: selectData.toUpperCase(),
+      direccion: values.direccion.toUpperCase(),
+      barrios: values.barrios.toUpperCase(),
+      telefono: values.telefono,
+      celular: values.celular,
+      emeil: values.emeil.toUpperCase(),
     };
     crearCliente(values);
   };
@@ -74,17 +74,36 @@ const Create = (props) => {
                 >
                   <Input
                     autoComplete="none"
-                    placeholder="Digite su 'Nombre' "
+                    placeholder="Digite su 'Nombre Completo' "
+                  />
+                </Form.Item>
+                <Form.Item label="Telefono" name="telefono">
+                  <InputNumber
+                    style={{ width: 200 }}
+                    min={1}
+                    autoComplete="none"
+                    placeholder="Digite su 'telefono fijo' "
+                  />
+                </Form.Item>
+                <Form.Item label="Celular" name="celular" style={{minWidth: "250px"}}>
+                  <InputNumber
+                  style={{ width: 200 }}
+                    min={1}
+                    max={10}
+                    autoComplete="none"
+                    placeholder="Digite su 'telefono celular' "
                   />
                 </Form.Item>
                 <Form.Item
-                  label="Apellido"
-                  name="apellido"
+                  name= "email"
+                  label="Email"
                   rules={[
-                    { required: true, message: "Por favor ingresar apellido!" },
+                    {
+                      type: "email",
+                    },
                   ]}
                 >
-                  <Input autoComplete="none" placeholder="Digite 'Apellido' " />
+                  <Input />
                 </Form.Item>
                 <Form.Item label="Barrio">
                   <Select

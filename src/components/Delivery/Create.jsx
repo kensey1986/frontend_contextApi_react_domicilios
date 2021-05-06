@@ -25,8 +25,8 @@ const Create = (props) => {
 
   const onFinish = async (values) => {
     values = {
-      name: values.username,
-      username: values.username,
+      name: values.name.toUpperCase(),
+      username: values.username.toUpperCase(),
       password: values.password,
       sucursal: selectData,
     };
@@ -42,7 +42,7 @@ const Create = (props) => {
         <Col span={7}></Col>
         <Col span={10}>
           <div style={{ padding: 30, background: "#ececec" }}>
-            <Card title='Crear Sucursal' bordered={false} style={{ width: 400 }}>
+            <Card title='Crear Domiciliario' bordered={false} style={{ width: 400 }}>
               <Form
                 {...layout}
                 initialValues={{ remember: false }}

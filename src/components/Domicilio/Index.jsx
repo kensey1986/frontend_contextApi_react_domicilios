@@ -18,12 +18,14 @@ const Index = () => {
     setDataFormDomicilio,
     dataTableSucursal,
     cargarListaSucursales,
-    actualizarDomicilio,
+    filtrarCliente,
     activeTap,
     setActiveTap,
     domiciliarioBySucursal,
-    dataTableCliente,
+    actualizarDomicilioByEstado,
     cargarListaCliente,
+    cargarListaEstados,
+    dataTableEstado
   } = useContext(DataContext);
 
   const { TabPane } = Tabs;
@@ -58,6 +60,16 @@ const Index = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    try {
+      cargarListaEstados();
+    } catch (error) {
+      console.error(error);
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const onChange = (activeKey) => {
     setDataFormDomicilio(undefined);
     setActiveTap(activeKey);
@@ -78,6 +90,8 @@ const Index = () => {
             dataTable={dataTableDomicilio}
             setDataForm={setDataFormDomicilio}
             setActiveTap={setActiveTap}
+            actualizarDomicilioByEstado={actualizarDomicilioByEstado}
+            dataTableEstado={dataTableEstado}
           />
         </TabPane>
         <TabPane
@@ -90,7 +104,7 @@ const Index = () => {
           key="2"
         >
           <Create
-            listaClientes={dataTableCliente}
+            filtrarCliente={filtrarCliente}
             listSucursales={dataTableSucursal}
             domiciliarioBySucursal={domiciliarioBySucursal}
           />

@@ -1,103 +1,96 @@
-import React from 'react'
-import { Table, Tag, Space } from 'antd';
+import React, { useContext, useState } from "react";
+import { DataContext } from "../../context/Context";
 
+import { Table, Tag, Space, InputNumber } from "antd";
 
 const TableDomicilio = (props) => {
-    const { dataTable, setListDomicilio} = props;
+  const { dataTablePedido, setDataTablePedido } = useContext(DataContext);
 
-    const rowSelected = (record) => {
-        setListDomicilio(record);
-      };
+  const rowSelected = (record) => {
+    setDataTablePedido(record);
+  };
 
-    const headerTable = [
-        {
-          title: 'Name',
-          dataIndex: 'name',
-          key: 'name',
-          render: text => <p>{text}</p>,
-        },
-        {
-          title: 'Age',
-          dataIndex: 'age',
-          key: 'age',
-        },
-        {
-          title: 'Address',
-          dataIndex: 'address',
-          key: 'address',
-        },
-        {
-          title: 'Tags',
-          key: 'tags',
-          dataIndex: 'tags',
-          render: tags => (
-            <>
-              {tags.map(tag => {
-                let color = tag.length > 5 ? 'geekblue' : 'green';
-                if (tag === 'loser') {
-                  color = 'volcano';
-                }
-                return (
-                  <Tag color={color} key={tag}>
-                    {tag.toUpperCase()}
-                  </Tag>
-                );
-              })}
-            </>
-          ),
-        },
-        {
-          title: 'Action',
-          key: 'action',
-          render: (text, record) => (
-            <Space size="middle">
-              <p>Invite {record.name}</p>
-              <p>Delete</p>
-            </Space>
-          ),
-        },
-      ];
-      const data = [
-        {
-          key: '1',
-          name: 'John Brown',
-          age: 32,
-          address: 'New York No. 1 Lake Park',
-          tags: ['nice', 'developer'],
-        },
-        {
-          key: '2',
-          name: 'Jim Green',
-          age: 42,
-          address: 'London No. 1 Lake Park',
-          tags: ['loser'],
-        },
-        {
-          key: '3',
-          name: 'Joe Black',
-          age: 32,
-          address: 'Sidney No. 1 Lake Park',
-          tags: ['cool', 'teacher'],
-        },
-      ];
-      
-    return (
-        <div>
-            <Table columns={headerTable} 
-    dataSource={data} 
-    onRow={(record) => {
-      return {
-        onDoubleClick: (event) => {
-          rowSelected(record);
-        },
-      };
-    }}/>
-        </div>
-    )
-}
+
+  const onChange = (e,record)=>{
+    const newData = dataTablePedido.map(item=>{
+      if(item.codigo===record.codigo){
+       item.cantidad = e;
+    }
+    return item;
+    })
+    setDataTablePedido(newData)
+    }
+
+    const onChange1 = (e,record)=>{
+      const newData = dataTablePedido.map(item=>{
+        if(item.codigo===record.codigo){
+         item.gramos = e;
+      }
+      return item;
+      })
+      setDataTablePedido(newData)
+      }
+
+  const headerTable = [
+    {
+      title: "N°",
+      dataIndex: "key",
+      key: "key",
+      width: "5%",
+    },
+    {
+      title: "Codigo",
+      dataIndex: "codigo",
+      key: "codigo",
+      width: "10%",
+    },
+    {
+      title: "Nombre",
+      dataIndex: "nombre",
+      key: "nombre",
+      width: "30%",
+    },
+    {
+      title: "Precio",
+      dataIndex: "precio",
+      key: "precio",
+      width: "30%",
+    },
+    {
+      title: "Cantidad",
+      dataIndex: "cantidad",
+      key: "cantidad",
+      width: "30%",
+      render: (text, record) => (
+        <InputNumber value={text} onChange={(e) => onChange(e, record)} />
+      ),
+    },
+    {
+      title: "Gramos",
+      dataIndex: "gramos",
+      key: "gramos",
+      width: "30%",
+      render: (text, record) => (
+        <InputNumber value={text} onChange={(e) => onChange1(e, record)} />
+      ),
+    },
+  ];
+
+  return (
+    <div>
+      <Table
+        columns={headerTable}
+        dataSource={dataTablePedido}
+        onRow={(record) => {
+          return {
+            onDoubleClick: (event) => {
+              rowSelected(record);
+            },
+          };
+        }}
+      />
+    </div>
+  );
+};
 
 export default TableDomicilio;
-
-
-
-

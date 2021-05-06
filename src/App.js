@@ -17,6 +17,10 @@ import Domicilio from "./components/Domicilio/Index";
 import Cliente from "./components/Cliente/Index";
 import Barrio from "./components/Barrio/Index";
 
+import moment from 'moment';
+import 'moment/locale/es';
+moment.locale('es');
+
 
 
 const App = () => {

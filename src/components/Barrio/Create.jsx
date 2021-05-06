@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { DataContext } from "../../context/Context";
-import { Row, Col, Card, Form, Input, Button } from "antd";
+import { Row, Col, Card, Form, Input, Button, InputNumber } from "antd";
 
 const Create = () => {
   const { crearBarrio } = useContext(DataContext);
@@ -14,6 +14,12 @@ const Create = () => {
   };
 
   const onFinish = async (values) => {
+
+    values = {
+      name: values.name.toUpperCase(),
+      comuna: values.comuna.toUpperCase(),
+      estrato: values.estrato,
+    };
     crearBarrio(values);
   };
 
@@ -36,7 +42,6 @@ const Create = () => {
                 name="basic"
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
-               
               >
                 <Form.Item
                   label="Barrio"
@@ -48,6 +53,26 @@ const Create = () => {
                   <Input
                     autoComplete="none"
                     placeholder="Digite 'Barrio' "
+                  />
+                </Form.Item>
+                <Form.Item
+                  label="Comuna"
+                  name="comuna"
+                  rules={[
+                    { required: true, message: "Por favor ingresar Comuna!" },
+                  ]}
+                >
+                  <Input
+                    autoComplete="none"
+                    placeholder="Digite 'Comuna' "
+                  />
+                </Form.Item>
+                <Form.Item label="Estrato" name="estrato">
+                  <InputNumber
+                   style={{ width: 200 }}
+                    min={1}
+                    autoComplete="none"
+                    placeholder="Digite 'estrato' "
                   />
                 </Form.Item>
                 <Form.Item {...tailLayout}>

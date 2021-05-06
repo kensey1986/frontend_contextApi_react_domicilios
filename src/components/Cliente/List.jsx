@@ -108,7 +108,7 @@ class List extends Component {
 
   render() {
     const { dataTable, setDataForm, setActiveTap } = this.props;
-   
+
     const rowSelected = (record) => {
       setDataForm(record);
       setActiveTap("3");
@@ -128,42 +128,69 @@ class List extends Component {
         ...this.getColumnSearchProps("name"),
       },
       {
-        title: "Apellido",
-        dataIndex: "apellido",
+        title: "Telefono",
+        dataIndex: "telefono",
         render: (text, record) => (
           <Space size="middle">
-            <a href="##">{record.apellido}</a>
+            <a href="##">{record.telefono}</a>
           </Space>
         ),
-        key: "apellido",
-        width: "20%",
-        ...this.getColumnSearchProps("apellido"),
+        key: "telefono",
+        width: "15%",
+        ...this.getColumnSearchProps("telefono"),
       },
       {
-        title: "Barrio",
-        dataIndex: "barrio.name",
+        title: "Celular",
+        dataIndex: "celular",
         render: (text, record) => (
           <Space size="middle">
-            <p>{record.barrio.name}</p>
+            <a href="##">{record.celular}</a>
           </Space>
         ),
-        key: "apellido",
-        width: "20%",
+        key: "celular",
+        width: "15%",
+        ...this.getColumnSearchProps("celular"),
       },
-     
+      {
+        title: "Emeil",
+        dataIndex: "emeil",
+        render: (text, record) => (
+          <Space size="middle">
+            <a href="##">{record.emeil}</a>
+          </Space>
+        ),
+        key: "emeil",
+        width: "15%",
+        ...this.getColumnSearchProps("emeil"),
+      },
+      // {
+      //   title: "Barrio",
+      //   dataIndex: "barrio.name",
+      //   render: (text, record) => (
+      //     <Space size="middle">
+      //       {record.barrio.name ? <p>{record.barrio.name}</p> : null}
+      //     </Space>
+      //   ),
+      //   key: "apellido",
+      //   width: "20%",
+      // },
     ];
     return (
-      <Table
-        columns={headerTable}
-        dataSource={dataTable}
-        onRow={(record) => {
-          return {
-            onDoubleClick: (event) => {
-              rowSelected(record);
-            },
-          };
-        }}
-      />
+      <>
+        {dataTable ? (
+          <Table
+            columns={headerTable}
+            dataSource={dataTable}
+            onRow={(record) => {
+              return {
+                onDoubleClick: (event) => {
+                  rowSelected(record);
+                },
+              };
+            }}
+          />
+        ) : null}
+      </>
     );
   }
 }

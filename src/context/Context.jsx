@@ -21,8 +21,14 @@ const DataProvider = (props) => {
   const [dataFormCliente, setDataFormCliente] = useState(null);
   const [dataTableBarrio, setDataTableBarrio] = useState(null);
   const [dataFormBarrio, setDataFormBarrio] = useState(null);
+  const [dataTablePedido, setDataTablePedido] = useState([]);
+  const [dataListCliente, setDataListCliente] = useState([]);
+  const [clienteSeleccionado, setClienteSeleccionado] = useState(null);
+  const [dataTableEstado, setDataTableEstado] = useState(null);
+
+
   const [activeTap, setActiveTap] = useState("1");
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     try {
@@ -42,7 +48,7 @@ const DataProvider = (props) => {
 
   /////////////////////////////////////
   const login = async (datos, props) => {
-    //loading();
+    loading();
     const uri = "auth/signin";
     const res = await autenticar(datos, uri, props);
     if (res) {
@@ -51,7 +57,7 @@ const DataProvider = (props) => {
     } else {
       setLogeado(false);
     }
-    //loading();
+    loading();
   };
 
   ////////////////////////////////////
@@ -60,73 +66,129 @@ const DataProvider = (props) => {
     setLogeado(false);
   };
 
-  /*const //loading = () => {
+  const loading = () => {
     setTimeout(function () {
       setVisibleLoading(!setVisibleLoading);
     }, 1000);
-  };*/
+  };
 
   /// Inicio seccion Cliente ********************************************************
   const crearCliente = async (datos) => {
-    ////loading();
+    loading();
     const uri = "cliente";
     const res = await crear(datos, uri);
     if (res) {
       setActiveTap("1");
       cargarListaCliente();
     }
-    //loading();
+    loading();
   };
   const actualizarCliente = async (datos) => {
-    //loading();
+    loading();
     const uri = "cliente";
     const res = await actualizar(datos, uri);
     if (res) {
       setActiveTap("1");
       cargarListaCliente();
     }
-    //loading();
+    loading();
+  };
+
+  const filtrarCliente = async (tipo, dato) => {
+    if (dato) {
+      let token = localStorage.getItem("token", JSON.stringify(true));
+      let url = CONFIG.URL + `cliente/filtrardoc/${dato}`;
+      if (tipo === 2) {
+        url = CONFIG.URL + `cliente/filtrarcel/${dato}`;
+      }
+      loading();
+      try {
+        const json = await axios.get(url, {
+          headers: {
+            Authorization: token,
+          },
+        });
+        let data = json;
+        if (data.status === 200) {
+          for (var i = 0; i < data.data.length; i++) {
+            data.data[i].key = i;
+          }
+          data = data.data;
+          setDataListCliente(data);
+          loading();
+        }
+      } catch (error) {
+        loading();
+        console.error(error);
+      }
+    }
+  };
+
+  const clienteById = async (id) => {
+    if (id) {
+      let token = localStorage.getItem("token", JSON.stringify(true));
+      let url = CONFIG.URL + `cliente/${id}`;
+      loading();
+      try {
+        const json = await axios.get(url, {
+          headers: {
+            Authorization: token,
+          },
+        });
+        let data = json;
+        if (data.status === 200) {
+          for (var i = 0; i < data.data.length; i++) {
+            data.data[i].key = i;
+          }
+          data = data.data;
+          setClienteSeleccionado(data);
+          loading();
+        }
+      } catch (error) {
+        loading();
+        console.error(error);
+      }
+    }
   };
 
   const cargarListaCliente = async () => {
-    //loading();
+    loading();
     const uri = "cliente";
     const res = await listado(uri);
-    console.log(res);
     setDataTableCliente(res);
-    //loading();
+    loading();
   };
 
   /// Fin seccion Cliente ****************************************************************
   /// Inicio seccion domiciliario ********************************************************
   const crearDomiciliario = async (datos) => {
-    //loading();
+    loading();
     const uri = "delivery";
     const res = await crear(datos, uri);
     if (res) {
       setActiveTap("1");
       cargarListaDomiciliarios();
     }
-    //loading();
+    loading();
   };
 
   const actualizarDomiciliario = async (datos) => {
-    //loading();
+    loading();
     const uri = "delivery";
     const res = await actualizar(datos, uri);
     if (res) {
       setActiveTap("1");
       cargarListaDomiciliarios();
     }
-    //loading();
+    loading();
   };
 
   const cargarListaDomiciliarios = async () => {
-    //loading();
+    loading();
     const uri = "delivery";
     const res = await listado(uri);
     setDataTableDelivery(res);
-    //loading();
+    loading();
   };
 
   const domiciliarioBySucursal = async (sucursalId) => {
@@ -145,9 +207,6 @@ const DataProvider = (props) => {
           data.data[i].key = uuidv4();
         }
         setDataDeliveryBySucursal(data.data);
-        // setTimeout(function () {
-        //   setVisibleLoading(false);
-        // }, 1000);
       }
     } catch (error) {
       console.error(error);
@@ -156,120 +215,152 @@ const DataProvider = (props) => {
   /// Fin seccion domiciliario ********************************************************
   /// Inicio seccion sucursales *******************************************************
   const crearSucursal = async (datos) => {
-    //loading();
+    loading();
     const uri = "sucursal";
     const res = await crear(datos, uri);
     if (res) {
       setActiveTap("1");
       cargarListaSucursales();
     }
-    //loading();
+    loading();
   };
 
   const actualizarSucursal = async (datos) => {
-    //loading();
+    loading();
     const uri = "sucursal";
     const res = await actualizar(datos, uri);
     if (res) {
       setActiveTap("1");
       cargarListaSucursales();
     }
-    //loading();
+    loading();
   };
 
   const cargarListaSucursales = async () => {
-    //loading();
+    loading();
     const uri = "sucursal";
     const res = await listado(uri);
     setDataTableSucursal(res);
-    //loading();
+    loading();
   };
 
   /// Fin seccion sucursales ***********************************************************
   /// Inicio seccion domicilios ********************************************************
   const crearDomicilio = async (datos) => {
-    //loading();
+    loading();
     const uri = "domicilio";
     const res = await crear(datos, uri);
     if (res) {
       setActiveTap("1");
       cargarListaDomicilio();
     }
-    //loading();
+    loading();
+    setClienteSeleccionado(null)
   };
 
   const actualizarDomicilio = async (datos) => {
-    console.log(datos);
-    //loading();
+    loading();
     const uri = "domicilio";
     const res = await actualizar(datos, uri);
     if (res) {
       setActiveTap("1");
       cargarListaDomicilio();
     }
-    //loading();
+    loading();
+  };
+
+  const actualizarDomicilioByEstado = async (datos) => {
+    //setVisibleLoading(true);
+    loading();
+     if (datos !== undefined && datos !== null) {
+       let token = localStorage.getItem("token", JSON.stringify(true));
+       let url = CONFIG.URL + `domicilio/estado/${datos._id}`;
+      // let url = CONFIG.URL + uri+`/${datos._id}`;
+       try {
+         const json = await axios({
+           method: "put", 
+           url: url,
+           data: datos,
+           headers: {
+             Authorization: token,
+           },
+         });
+         if (json.status === 200) {
+          console.log('Actualizado correctamente');
+           return true;
+         } else {
+           console.log.error('error al actualizarr');
+           return false;
+         }
+       } catch (error) {
+         console.log(error.response);
+       }
+     }
+
   };
 
   const cargarListaDomicilio = async () => {
-    //loading();
+    loading();
     const uri = "domicilio";
     const res = await listado(uri);
     setDataTableDomicilio(res);
-    //loading();
+    loading();
   };
   /// Fin seccion sucursales ********************************************************
   ////Inicio seccion productos ******************************************************
   const filtrarProducto = async (articulo) => {
     //setVisibleLoading(true);
-    setLoading(true);
+    loading();
     try {
       let url = CONFIG.URL + `products/${articulo}`;
       const json = await axios(url);
-      const data = json;
+      let data = json;
       if (data.status === 200) {
-        setLoading(false);
-        console.log(data.data);
-        setDataListArticulo(data.data);
+        for (var i = 0; i < data.data.length; i++) {
+          data.data[i].key = i;
+        }
+        data = data.data;
+        setDataListArticulo(data);
+        loading();
       }
     } catch (error) {
-      setLoading(false);
+      loading();
       console.error(error);
     }
   };
   /// Fin seccion productos *********************************************************
   /// Inicio seccion sucursales *******************************************************
   const crearBarrio = async (datos) => {
-    //loading();
+    loading();
     const uri = "barrio";
     const res = await crear(datos, uri);
     if (res) {
       setActiveTap("1");
       cargarListaBarrios();
     }
-    //loading();
+    loading();
   };
 
   const actualizarBarrio = async (datos) => {
-    //loading();
+    loading();
     const uri = "barrio";
     const res = await actualizar(datos, uri);
     if (res) {
       setActiveTap("1");
       cargarListaBarrios();
     }
-    //loading();
+    loading();
   };
 
   const cargarListaBarrios = async () => {
-    //loading();
+    loading();
     const uri = "barrio";
     const res = await listado(uri);
     setDataTableBarrio(res);
-    //loading();
+    loading();
   };
 
   const barrioById = async (barrioId) => {
-    console.log(barrioId);
     setVisibleLoading(true);
     let token = localStorage.getItem("token", JSON.stringify(true));
     try {
@@ -290,7 +381,17 @@ const DataProvider = (props) => {
     }
   };
 
-  /// Fin seccion sucursales ***********************************************************
+  /// Fin seccion productos *********************************************************
+  /// Inicio seccion sucursales *******************************************************
+  const cargarListaEstados = async () => {
+    loading();
+    const uri = "estado";
+    const res = await listado(uri);
+    setDataTableEstado(res);
+    loading();
+  };
+  /// Fin seccion productos *********************************************************
+  /// Inicio seccion sucursales *******************************************************
   /////////////////////
   /////
   return (
@@ -343,6 +444,16 @@ const DataProvider = (props) => {
         dataFormBarrio,
         setDataFormBarrio,
         barrioById,
+        dataTablePedido,
+        setDataTablePedido,
+        filtrarCliente,
+        dataListCliente,
+        clienteSeleccionado,
+        setClienteSeleccionado,
+        clienteById,
+        actualizarDomicilioByEstado,
+        cargarListaEstados,
+        dataTableEstado
       }}
     >
       {props.children}

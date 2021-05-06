@@ -14,6 +14,10 @@ const Create = () => {
   };
 
   const onFinish = async (values) => {
+    values={
+      name: values.name.toUpperCase(),
+      direccion: values.direccion.toUpperCase(),
+    }
     crearSucursal(values);
   };
 
