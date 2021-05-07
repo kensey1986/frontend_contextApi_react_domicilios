@@ -63,6 +63,7 @@ const SelectCliente = (props) => {
             <Radio.Group onChange={onChange1} value={value}>
               <Radio value={1}>Documento</Radio>
               <Radio value={2}>Celular</Radio>
+              <Radio value={3}>Nombres</Radio>
             </Radio.Group>
           </Form.Item>
         </Col>

@@ -101,6 +101,10 @@ const DataProvider = (props) => {
       if (tipo === 2) {
         url = CONFIG.URL + `cliente/filtrarcel/${dato}`;
       }
+      if (tipo === 3) {
+        url = CONFIG.URL + `cliente/filtrarnom/${dato}`;
+      }
+
       loading();
       try {
         const json = await axios.get(url, {
